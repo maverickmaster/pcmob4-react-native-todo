@@ -70,7 +70,11 @@ export default function NotesScreen({ navigation, route }) {
   function deleteNote(id) {
     console.log("Deleting " + id);
     // To delete that item, we filter out the item we don't want
-    setNotes(notes.filter((item) => item.id !== id));
+    db.where("id", "==", id)
+      .get()
+      .then((querySnapShot) => {
+        querySnapShot.forEach((doc) => doc.ref.delete());
+      });
   }
 
   // The function to render each row in our FlatList
