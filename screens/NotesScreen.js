@@ -19,6 +19,20 @@ export default function NotesScreen({ navigation, route }) {
   //isItLunchTime: true,
   // });
 
+  // when the screen loads, we start Monitoring firebase
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("todos")
+      .onSnapshot((collection) => {
+        const updatedNotes = collection.docs.map((doc) => doc.data());
+        setNotes(updatedNotes);
+      });
+
+    //unsubscribe when unmounting
+    return () => unsubscribe();
+  }, []);
+
   // This is to set up the top right button
   useEffect(() => {
     navigation.setOptions({
