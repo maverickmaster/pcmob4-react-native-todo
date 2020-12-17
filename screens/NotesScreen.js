@@ -11,6 +11,7 @@ import firebase from "../database/firebaseDB";
 
 export default function NotesScreen({ navigation, route }) {
   const [notes, setNotes] = useState([]);
+  const db = firebase.firestore().collection("todos");
 
   //Testing code to see how to insert to firebasDB
   //firebase.firestore().collection("testing").add({
@@ -21,13 +22,10 @@ export default function NotesScreen({ navigation, route }) {
 
   // when the screen loads, we start Monitoring firebase
   useEffect(() => {
-    const unsubscribe = firebase
-      .firestore()
-      .collection("todos")
-      .onSnapshot((collection) => {
-        const updatedNotes = collection.docs.map((doc) => doc.data());
-        setNotes(updatedNotes);
-      });
+    const unsubscribe = db.onSnapshot((collection) => {
+      const updatedNotes = collection.docs.map((doc) => doc.data());
+      setNotes(updatedNotes);
+    });
 
     //unsubscribe when unmounting
     return () => unsubscribe();
@@ -60,7 +58,7 @@ export default function NotesScreen({ navigation, route }) {
         done: false,
         id: notes.length.toString(),
       };
-      firebase.firestore().collection("todos").add(newNote);
+      db.add(newNote);
     }
   }, [route.params?.text]);
 
