@@ -22,7 +22,7 @@ export default function NotesScreen({ navigation, route }) {
 
   // when the screen loads, we start Monitoring firebase
   useEffect(() => {
-    const unsubscribe = db.onSnapshot((collection) => {
+    const unsubscribe = db.orderBy("created").onSnapshot((collection) => {
       const updatedNotes = collection.docs.map((doc) => {
         const noteObject = {
           ...doc.data(),
@@ -35,7 +35,7 @@ export default function NotesScreen({ navigation, route }) {
     });
 
     //unsubscribe when unmounting
-    return () => unsubscribe();
+    return () => unsubscribe(); // return the cleanup function
   }, []);
 
   // This is to set up the top right button
@@ -64,6 +64,10 @@ export default function NotesScreen({ navigation, route }) {
         title: route.params.text,
         done: false,
         // id: notes.length.toString(),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+
+        // alternative:
+        //create :Date.now().toString(),
       };
       db.add(newNote);
     }
@@ -82,7 +86,7 @@ export default function NotesScreen({ navigation, route }) {
     //.then((querySnapShot) => {
     // querySnapShot.forEach((doc) => doc.ref.delete());
     //});
-    db.doc(id).delete();
+    db.doc(id).delete(); // this is much simpler now we have the Firestore ID
   }
 
   // The function to render each row in our FlatList
