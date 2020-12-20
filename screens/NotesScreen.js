@@ -126,7 +126,7 @@ export default function NotesScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffc",
+    backgroundColor: "lightblue",
     alignItems: "center",
     justifyContent: "center",
   },

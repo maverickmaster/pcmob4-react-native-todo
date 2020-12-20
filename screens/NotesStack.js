@@ -12,7 +12,7 @@ export default function NotesStack() {
         options={{
           title: "Notes, a Todo App",
           headerStyle: {
-            backgroundColor: "yellow",
+            backgroundColor: "lightgrey",
             height: 100,
             shadowColor: "black",
             shadowOpacity: 0.2,
